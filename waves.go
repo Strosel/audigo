@@ -5,6 +5,7 @@ import "math"
 //Wave Describeas a soundwave as a set of points
 type Wave []int16
 
+//GenerateSine Generate a sine-wave with the given parameters
 func GenerateSine(env Envelope, sampleRate uint32, frequency ...float64) Wave {
 	bufferSize := uint32(float64(sampleRate) * env.Duration().Seconds())
 
