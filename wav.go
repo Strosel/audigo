@@ -8,7 +8,7 @@ import (
 type WAV struct {
 	Header WaveHeader
 	Format FormatChunk
-	Data   []DataChunk
+	Data   DataChunk
 }
 
 //NewWAV Create a new Generic WAV
@@ -16,29 +16,24 @@ func NewWAV() WAV {
 	return WAV{
 		Header: NewWaveHeader(),
 		Format: NewFormatChunk(),
-		Data: []DataChunk{
-			NewDataChunk(),
-		},
+		Data:   NewDataChunk(),
 	}
 }
 
 //AddTrack Adds a new audiotrack to the WAV
 func (w *WAV) AddTrack() {
-	w.Data = append(w.Data, NewDataChunk())
+	w.Data.firstTrack = false
+	w.Data.index = 0
 }
 
 //Bytes Returns the binary representation of the WAV
 func (w WAV) Bytes() []byte {
-	completeData := []byte{}
-	for _, d := range w.Data {
-		completeData = append(completeData, d.Bytes()...)
-	}
-	w.Header.FileLength = uint32(4 + len(w.Format.Bytes()) + len(completeData))
+	w.Header.FileLength = uint32(4 + len(w.Format.Bytes()) + len(w.Data.Bytes()))
 
 	tmpBytes := []byte{}
 	tmpBytes = append(tmpBytes, w.Header.Bytes()...)
 	tmpBytes = append(tmpBytes, w.Format.Bytes()...)
-	tmpBytes = append(tmpBytes, completeData...)
+	tmpBytes = append(tmpBytes, w.Data.Bytes()...)
 
 	return tmpBytes
 }
