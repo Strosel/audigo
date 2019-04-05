@@ -10,9 +10,6 @@ const (
 	DCHUNKID = "data"
 )
 
-//Wave Describeas a soundwave as a set of points
-type Wave []int16
-
 //DataChunk Descibes a .wav DataChunk
 type DataChunk struct {
 	ChunkID   string

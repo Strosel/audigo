@@ -1,7 +1,6 @@
 package audigo
 
 import (
-	"math"
 	"time"
 )
 
@@ -14,7 +13,6 @@ const (
 type Envelope interface {
 	Duration() time.Duration
 	Amplitude(float64) float64
-	GenerateSine(uint32, ...float64) Wave
 }
 
 type linearASDR struct {
@@ -63,38 +61,4 @@ func (ble linearASDR) Amplitude(x float64) float64 {
 	}
 
 	return x*k + m
-}
-
-func (ble linearASDR) GenerateSine(sampleRate uint32, frequency ...float64) Wave {
-	bufferSize := uint32(float64(sampleRate) * ble.Duration().Seconds())
-
-	timePeriod := make([]float64, len(frequency))
-	for i, freq := range frequency {
-		timePeriod[i] = (math.Pi * 2 * freq) / float64(sampleRate)
-	}
-
-	sinesum := make([]float64, bufferSize)
-	sinemax := 0.0
-	for i := range sinesum {
-		sum := 0.0
-		for _, tp := range timePeriod {
-			sum += math.Sin(tp * float64(i))
-		}
-
-		if sum > sinemax {
-			sinemax = sum
-		}
-
-		sinesum[i] = sum
-	}
-
-	data := make(Wave, bufferSize)
-	for i, sine := range sinesum {
-		sec := (float64(i) / float64(bufferSize)) * float64(ble.Duration())
-		amp := ble.Amplitude(sec)
-
-		data[i] = int16(amp * sine * (1 / sinemax))
-	}
-
-	return data
 }
