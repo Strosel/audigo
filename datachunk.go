@@ -73,28 +73,5 @@ func (dc *DataChunk) AddSampleData(leftBuffer, rightBuffer Wave) {
 
 //AddSampleDataMono Adds mono audio to the DataCunk
 func (dc *DataChunk) AddSampleDataMono(buffer Wave) {
-	if dc.firstTrack {
-		tmpData := make(Wave, len(buffer)*2)
-		bufferOffset := 0
-		for i := 0; i < len(tmpData); i += 2 {
-			tmpData[i] = buffer[bufferOffset]
-			tmpData[i+1] = buffer[bufferOffset]
-			bufferOffset++
-		}
-		dc.WaveData = append(dc.WaveData, tmpData...)
-		dc.ChunkSize = uint32(len(dc.WaveData) * 2)
-	} else {
-		if dc.index+len(buffer)*2 > len(dc.WaveData) {
-			tmpData := make(Wave, (dc.index+len(buffer)*2)-len(dc.WaveData))
-			dc.WaveData = append(dc.WaveData, tmpData...)
-			dc.ChunkSize = uint32(len(dc.WaveData) * 2)
-		}
-		bufferOffset := 0
-		for i := dc.index; i < dc.index+len(buffer)*2; i += 2 {
-			dc.WaveData[i] += buffer[bufferOffset]
-			dc.WaveData[i+1] += buffer[bufferOffset]
-			bufferOffset++
-		}
-		dc.index += len(buffer) * 2
-	}
+	dc.AddSampleData(buffer, buffer)
 }

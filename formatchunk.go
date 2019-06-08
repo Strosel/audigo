@@ -42,7 +42,7 @@ func (fc *FormatChunk) recalcBlockSizes() {
 }
 
 //Bytes Returns the binary representation of the FormatChunk
-func (fc FormatChunk) Bytes() []byte {
+func (fc *FormatChunk) Bytes() []byte {
 	fc.recalcBlockSizes()
 	out := bytes.NewBuffer([]byte{})
 
