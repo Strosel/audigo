@@ -46,7 +46,7 @@ func (dc DataChunk) Bytes() []byte {
 //AddSampleData Adds stereo audio to the DataChunk
 func (dc *DataChunk) AddSampleData(leftBuffer, rightBuffer Wave) {
 	if dc.firstTrack {
-		tmpData := make([]int16, len(leftBuffer)+len(rightBuffer))
+		tmpData := make(Wave, len(leftBuffer)+len(rightBuffer))
 		bufferOffset := 0
 		for index := 0; index < len(tmpData); index += 2 {
 			tmpData[index] = leftBuffer[bufferOffset]
@@ -57,7 +57,7 @@ func (dc *DataChunk) AddSampleData(leftBuffer, rightBuffer Wave) {
 		dc.ChunkSize = uint32(len(dc.WaveData) * 2)
 	} else {
 		if dc.index+len(leftBuffer)+len(rightBuffer) > len(dc.WaveData) {
-			tmpData := make([]int16, dc.index+len(leftBuffer)+len(rightBuffer)-len(dc.WaveData))
+			tmpData := make(Wave, dc.index+len(leftBuffer)+len(rightBuffer)-len(dc.WaveData))
 			dc.WaveData = append(dc.WaveData, tmpData...)
 			dc.ChunkSize = uint32(len(dc.WaveData) * 2)
 		}
@@ -74,7 +74,7 @@ func (dc *DataChunk) AddSampleData(leftBuffer, rightBuffer Wave) {
 //AddSampleDataMono Adds mono audio to the DataCunk
 func (dc *DataChunk) AddSampleDataMono(buffer Wave) {
 	if dc.firstTrack {
-		tmpData := make([]int16, len(buffer)*2)
+		tmpData := make(Wave, len(buffer)*2)
 		bufferOffset := 0
 		for i := 0; i < len(tmpData); i += 2 {
 			tmpData[i] = buffer[bufferOffset]
@@ -85,7 +85,7 @@ func (dc *DataChunk) AddSampleDataMono(buffer Wave) {
 		dc.ChunkSize = uint32(len(dc.WaveData) * 2)
 	} else {
 		if dc.index+len(buffer)*2 > len(dc.WaveData) {
-			tmpData := make([]int16, (dc.index+len(buffer)*2)-len(dc.WaveData))
+			tmpData := make(Wave, (dc.index+len(buffer)*2)-len(dc.WaveData))
 			dc.WaveData = append(dc.WaveData, tmpData...)
 			dc.ChunkSize = uint32(len(dc.WaveData) * 2)
 		}
