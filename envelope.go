@@ -62,3 +62,18 @@ func (ble linearASDR) Amplitude(x float64) float64 {
 
 	return x*k + m
 }
+
+type nilEnvelope time.Duration
+
+//NewNilEnvelope Creates a nil envelope that doesnt modify the given wave
+func NewNilEnvelope(duration time.Duration) Envelope {
+	return nilEnvelope(duration)
+}
+
+func (ne nilEnvelope) Duration() time.Duration {
+	return time.Duration(ne)
+}
+
+func (ne nilEnvelope) Amplitude(x float64) float64 {
+	return 1.0
+}
