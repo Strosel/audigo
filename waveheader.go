@@ -29,6 +29,23 @@ func NewWaveHeader() WaveHeader {
 	}
 }
 
+//ReadWaveHeader Reads the header from raw bytes. See Open()
+func ReadWaveHeader(file []byte) (WaveHeader, error) {
+	wh := WaveHeader{
+		FileType:  string(file[:4]),
+		MediaType: string(file[8:12]),
+	}
+
+	// header buffer
+	hb := bytes.NewBuffer(file[4:8])
+	err := binary.Read(hb, binary.LittleEndian, &wh.FileLength)
+	if err != nil {
+		return WaveHeader{}, err
+	}
+
+	return wh, nil
+}
+
 //Bytes Returns the binary representation of the WaveHeader
 func (wh WaveHeader) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})

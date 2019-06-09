@@ -1,6 +1,7 @@
 package audigo
 
 import (
+	"fmt"
 	"io/ioutil"
 )
 
@@ -18,6 +19,39 @@ func NewWAV() WAV {
 		Format: NewFormatChunk(),
 		Data:   NewDataChunk(),
 	}
+}
+
+//Open Opens the given .wav file. Assumes formatting according to this spec: http://www.topherlee.com/software/pcm-tut-wavformat.html [2019-06-09]
+func Open(filename string) (WAV, error) {
+	if len(filename) < 4 || filename[len(filename)-4:] != ".wav" {
+		filename += ".wav"
+	}
+
+	file, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return WAV{}, fmt.Errorf("ReadFile: %v", err)
+	}
+
+	header, err := ReadWaveHeader(file)
+	if err != nil {
+		return WAV{}, fmt.Errorf("ReadWaveHeader: %v", err)
+	}
+
+	FormatChunk, err := ReadFormatChunk(file)
+	if err != nil {
+		return WAV{}, fmt.Errorf("ReadFormatChunk: %v", err)
+	}
+
+	DataChunk, err := ReadDataChunk(file)
+	if err != nil {
+		return WAV{}, fmt.Errorf("ReadDataChunk: %v", err)
+	}
+
+	return WAV{
+		Header: header,
+		Format: FormatChunk,
+		Data:   DataChunk,
+	}, nil
 }
 
 //AddTrack Adds a new audiotrack to the WAV

@@ -36,6 +36,42 @@ func NewFormatChunk() FormatChunk {
 	return fc
 }
 
+//ReadFormatChunk Reads the FormatChunk from raw bytes. See Open()
+func ReadFormatChunk(file []byte) (FormatChunk, error) {
+	fc := FormatChunk{}
+
+	var err error
+	locs := []int{12, 16, 20, 22, 24, 28, 32, 34, 36, 40}
+	for i, v := range locs[:9] {
+		buff := bytes.NewBuffer(file[v:locs[i+1]])
+
+		switch i {
+		case 0:
+			fc.ChunkID = string(file[v:locs[i+1]])
+		case 1:
+			err = binary.Read(buff, binary.LittleEndian, &fc.ChunkSize)
+		case 2:
+			err = binary.Read(buff, binary.LittleEndian, &fc.FormatTag)
+		case 3:
+			err = binary.Read(buff, binary.LittleEndian, &fc.Channels)
+		case 4:
+			err = binary.Read(buff, binary.LittleEndian, &fc.Frequency)
+		case 5:
+			err = binary.Read(buff, binary.LittleEndian, &fc.AverageBytesPerSec)
+		case 6:
+			err = binary.Read(buff, binary.LittleEndian, &fc.BlockAlign)
+		case 7:
+			err = binary.Read(buff, binary.LittleEndian, &fc.BitsPerSample)
+		}
+
+		if err != nil {
+			return FormatChunk{}, err
+		}
+	}
+
+	return fc, nil
+}
+
 func (fc *FormatChunk) recalcBlockSizes() {
 	fc.BlockAlign = fc.Channels * (fc.BitsPerSample / 8)
 	fc.AverageBytesPerSec = fc.Frequency * uint32(fc.BlockAlign)

@@ -30,6 +30,26 @@ func NewDataChunk() DataChunk {
 	}
 }
 
+//ReadDataChunk Reads the DataChunk from raw bytes. See Open()
+func ReadDataChunk(file []byte) (DataChunk, error) {
+	dc := DataChunk{}
+
+	dc.ChunkID = string(file[36:40])
+
+	buff := bytes.NewBuffer(file[40:44])
+	err := binary.Read(buff, binary.LittleEndian, &dc.ChunkSize)
+	if err != nil {
+		return DataChunk{}, err
+	}
+
+	dc.WaveData = make(Wave, len(file[44:]))
+	for i, v := range file[44:] {
+		dc.WaveData[i] = int16(v)
+	}
+
+	return dc, nil
+}
+
 //Bytes Returns the binary representation of the DataChunk
 func (dc DataChunk) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
