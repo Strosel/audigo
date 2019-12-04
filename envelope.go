@@ -77,3 +77,23 @@ func (ne nilEnvelope) Duration() time.Duration {
 func (ne nilEnvelope) Amplitude(x float64) float64 {
 	return 1.0
 }
+
+type plainEnvelope struct {
+	d time.Duration
+	a float64
+}
+
+func NewPlainEnvelope(duration time.Duration, amplitude float64) Envelope {
+	return plainEnvelope{
+		d: duration,
+		a: amplitude,
+	}
+}
+
+func (pe plainEnvelope) Duration() time.Duration {
+	return pe.d
+}
+
+func (pe plainEnvelope) Amplitude(float64) float64 {
+	return pe.a
+}
