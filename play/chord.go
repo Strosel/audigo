@@ -36,7 +36,7 @@ func (c Chord) RestTickDuration(quarter uint16) uint16 {
 //ToMIDI converst the chord into an array of midi events
 func (c Chord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := []midi.Event{}
-	e := &midi.VoiceEvent{
+	e := midi.VoiceEvent{
 		Channel:  ch,
 		Duration: midi.VLQ(c.RestTickDuration(ticks)),
 	}
@@ -46,7 +46,7 @@ func (c Chord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 			e.Duration = 0
 		}
 		e.NoteOn(0x3C+uint8(n.Dist()), vel)
-		out = append(out, e)
+		out = append(out, &e)
 	}
 
 	//set the duration of the chord aka the time between last NoteOn and first NoteOff
@@ -57,7 +57,7 @@ func (c Chord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 			e.Duration = 0
 		}
 		e.NoteOff(0x3C+uint8(n.Dist()), vel)
-		out = append(out, e)
+		out = append(out, &e)
 	}
 
 	return out
