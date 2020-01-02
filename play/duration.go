@@ -12,6 +12,8 @@ const (
 	Half
 	//Quarter is a quarter note
 	Quarter
-	//Eight is a eight note
-	Eight
+	//Eighth is a eighth note
+	Eighth
+	//Sixteenth is a sixteenth note
+	Sixteenth
 )
