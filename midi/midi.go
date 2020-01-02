@@ -32,11 +32,11 @@ func (m MIDI) Bytes() []byte {
 	return out.Bytes()
 }
 
-//Save saves the MIDI file as a new .midi/.mid file
+//Save saves the MIDI file as a new .mid file
 func (m MIDI) Save(filename string) error {
-	re, _ := regexp.Compile(`\.midi?$`)
+	re, _ := regexp.Compile(`\.mid$`)
 	if !re.MatchString(strings.ToLower(filename)) {
-		filename += ".midi"
+		filename += ".mid"
 	}
 
 	return ioutil.WriteFile(filename, m.Bytes(), 0666)
