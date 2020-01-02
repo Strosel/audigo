@@ -15,12 +15,6 @@ type Song struct {
 	Instruments map[string][]Playable
 }
 
-//UpdateTempo updates the tempo of the song and returns the required meta event
-func (s *Song) UpdateTempo(t uint32) midi.MetaEvent {
-	s.Tempo = t
-	return midi.MetaTempo(uint32(time.Minute.Microseconds()) / s.Tempo)
-}
-
 //ToMIDI converts the song into a midi file
 func (s Song) ToMIDI() midi.MIDI {
 	var ticks uint16 = 50 //should be inputed or calculated
