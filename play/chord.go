@@ -9,7 +9,8 @@ type Chord []Note
 func (c Chord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := []midi.Event{}
 	e := midi.VoiceEvent{
-		Channel: ch,
+		Channel:  ch,
+		Duration: midi.VLQ(c[0].RestTickDuration(ticks)),
 	}
 	//Generate the NoteOn events 0 time from eachother
 	for _, n := range c {

@@ -31,7 +31,8 @@ func (t Tie) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := t.Note.ToMIDI(ticks, ch, vel)
 
 	e := midi.VoiceEvent{
-		Channel: ch,
+		Channel:  ch,
+		Duration: midi.VLQ(t.Note.RestTickDuration(ticks)),
 	}
 	var d uint16 = 0
 	for i := range t.Values {
