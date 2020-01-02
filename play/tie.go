@@ -1,46 +1,55 @@
 package play
 
 import (
+	"time"
+
 	"github.com/strosel/audigo/midi"
 )
 
 //Tie is a set of notes with a tie
-type Tie struct {
-	Note   Note
-	Values []Duration
-	Dots   []int
-}
+type Tie []Playable
 
 //NewTie creates a tie from a set sof notes
-func NewTie(notes ...Note) Tie {
-	v := []Duration{}
-	d := []int{}
-	for _, n := range notes {
-		v = append(v, n.Value)
-		d = append(d, n.Dots)
+func NewTie(plays ...Playable) Tie {
+	return Tie(plays)
+}
+
+//Duration calculates and returns the duration of the tie based on
+//how long the measure takes, aka the length of a whole note
+func (t Tie) Duration(measure time.Duration) time.Duration {
+	out := time.Duration(0)
+	for _, p := range t {
+		out += p.Duration(measure)
 	}
-	return Tie{
-		Note:   notes[0],
-		Values: v,
-		Dots:   d,
+	return out
+}
+
+//TickDuration calculates and returns the duration of the tie in ticks
+//based on how many ticks a quarter note is
+func (t Tie) TickDuration(quarter uint16) uint16 {
+	out := uint16(0)
+	for _, p := range t {
+		out += p.TickDuration(quarter)
 	}
+	return out
+}
+
+//RestDuration calculates and returns the duration of the rest preceding the
+//tie based on how long the measure takes, aka the length of a whole note
+func (t Tie) RestDuration(measure time.Duration) time.Duration {
+	return t[0].RestDuration(measure)
+}
+
+//RestTickDuration calculates and returns the duration of the rest preceding the
+//tie in ticks based on how many ticks a quarter note is
+func (t Tie) RestTickDuration(quarter uint16) uint16 {
+	return t[0].RestTickDuration(quarter)
 }
 
 //ToMIDI converst the tied set into an array of midi events
 func (t Tie) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
-	out := t.Note.ToMIDI(ticks, ch, vel)
+	out := t[0].ToMIDI(ticks, ch, vel)
 
-	e := midi.VoiceEvent{
-		Channel: ch,
-	}
-	var d uint16 = 0
-	for i := range t.Values {
-		t.Note.Value = t.Values[i]
-		t.Note.Dots = t.Dots[i]
-		d += t.Note.TickDuration(ticks)
-	}
-	e.Duration = midi.VLQ(d)
-	e.NoteOff(0x3C+uint8(t.Note.Dist()), vel)
-	out[1] = e
+	out[len(out)/2].SetDelta(midi.VLQ(t.TickDuration(ticks)))
 	return out
 }

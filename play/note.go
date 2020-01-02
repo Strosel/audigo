@@ -163,7 +163,7 @@ func (n Note) RestTickDuration(quarter uint16) uint16 {
 //with the given ticks for a quarter note, channel and velocity
 func (n Note) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := []midi.Event{}
-	e := midi.VoiceEvent{
+	e := &midi.VoiceEvent{
 		Channel:  ch,
 		Duration: midi.VLQ(n.RestTickDuration(ticks)),
 	}
