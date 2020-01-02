@@ -5,6 +5,10 @@ type VLQ uint32
 
 //Bytes returns the VLQ as a byte array
 func (v VLQ) Bytes() []byte {
+	if v == 0 {
+		return []byte{0x00}
+	}
+
 	out := []byte{}
 
 	//the first (read rightmost) byte should not have the bit 7 flag
