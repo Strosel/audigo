@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+//MIDI a midi file
 type MIDI struct {
 	Header Header
 	Tracks []Track

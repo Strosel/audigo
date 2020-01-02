@@ -5,21 +5,25 @@ import (
 	"encoding/binary"
 )
 
-type MIDIFormat uint16
+//Format one of 3 midi formats
+type Format uint16
 
 const (
 	//HeaderType is the chink type of a header chunk
 	HeaderType = "MThd"
 
-	Single MIDIFormat = iota
+	//Single is midi format 0, a single track
+	Single Format = iota
+	//Simultaneous is midi format 1, multiple tracks to be played simultaneously
 	Simultaneous
+	//Independent is midi format 2, multiple tracks to be played independently
 	Independent
 )
 
 //Header is a midi header chunk
 //for now only ticks per quarter note is supported for Division
 type Header struct {
-	Format   MIDIFormat
+	Format   Format
 	Tracks   uint16
 	Division uint16
 }
