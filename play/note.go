@@ -2,6 +2,8 @@ package play
 
 import (
 	"math"
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/strosel/audigo/midi"
@@ -16,6 +18,46 @@ type Note struct {
 	Accidental Accidental
 	Value      Duration
 	Dots       int
+}
+
+//Parse parses a string of format c4b. into a note
+//uses regex ([a-gA-G])(\d+)([b#]?)(\.*) and panics on error
+func Parse(note string, d Duration) Note {
+	if len(note) < 2 {
+		panic("Invalid note")
+	}
+	re, err := regexp.Compile(`([a-gA-G])(\d+)([b#]?)(\.*)`)
+	if err != nil {
+		panic("Parser Error")
+	}
+
+	all := re.FindAllStringSubmatch(note, -1)
+	if all == nil || len(all) == 0 {
+		panic("Invalid note")
+	}
+	sNote := all[0][1:]
+
+	oct, err := strconv.Atoi(sNote[1])
+	if err != nil {
+		panic("Invalid octave")
+	}
+
+	acc := Natural
+	if sNote[2] == "b" {
+		acc = Flat
+	} else if sNote[2] == "#" {
+		acc = Sharp
+	}
+
+	n := Note{
+		Note:       sNote[0][0],
+		Octave:     oct,
+		Accidental: acc,
+		Value:      d,
+		Dots:       len(sNote[3]),
+	}
+
+	return n
 }
 
 //Dist calculates the dustance from c4 in half steps

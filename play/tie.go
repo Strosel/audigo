@@ -1,15 +1,32 @@
 package play
 
-import "github.com/strosel/audigo/midi"
+import (
+	"github.com/strosel/audigo/midi"
+)
 
-//Tie is a pair of notes with a tie
+//Tie is a set of notes with a tie
 type Tie struct {
 	Note   Note
-	Values [2]Duration
-	Dots   [2]int
+	Values []Duration
+	Dots   []int
 }
 
-//ToMIDI converst the tied pair into an array of midi events
+//NewTie creates a tie from a set sof notes
+func NewTie(notes ...Note) Tie {
+	v := []Duration{}
+	d := []int{}
+	for _, n := range notes {
+		v = append(v, n.Value)
+		d = append(d, n.Dots)
+	}
+	return Tie{
+		Note:   notes[0],
+		Values: v,
+		Dots:   d,
+	}
+}
+
+//ToMIDI converst the tied set into an array of midi events
 func (t Tie) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := t.Note.ToMIDI(ticks, ch, vel)
 
