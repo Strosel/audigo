@@ -7,6 +7,7 @@ import (
 
 //MetaEvent a midi meta event,
 type MetaEvent struct {
+	Type     uint8
 	Data     []uint8
 	Duration VLQ
 }
@@ -21,6 +22,7 @@ func (me MetaEvent) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
 
 	binary.Write(out, binary.BigEndian, uint8(0xFF))
+	binary.Write(out, binary.BigEndian, me.Type)
 	binary.Write(out, binary.BigEndian, me.length().Bytes())
 	for _, d := range me.Data {
 		binary.Write(out, binary.BigEndian, d)
