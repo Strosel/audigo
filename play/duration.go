@@ -6,8 +6,10 @@ package play
 type Duration int
 
 const (
+	//None is a 0 duration
+	None Duration = iota - 1
 	//Whole is a whole note
-	Whole Duration = iota
+	Whole
 	//Half is a half note
 	Half
 	//Quarter is a quarter note
