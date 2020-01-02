@@ -1,4 +1,4 @@
-package main
+package play
 
 //Duration is the duration of a note relative to the meter
 //as notes are based in powers of two Duration is stored as the exponent

@@ -1,4 +1,4 @@
-package main
+package play
 
 func main() {
 	s := Song{

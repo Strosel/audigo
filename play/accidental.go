@@ -1,4 +1,4 @@
-package main
+package play
 
 //Accidental represents the different musical accidentals
 type Accidental int
