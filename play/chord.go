@@ -13,7 +13,10 @@ func (c Chord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 		Duration: midi.VLQ(c[0].RestTickDuration(ticks)),
 	}
 	//Generate the NoteOn events 0 time from eachother
-	for _, n := range c {
+	for i, n := range c {
+		if i != 0 {
+			e.Duration = 0
+		}
 		e.NoteOn(0x3C+uint8(n.Dist()), vel)
 		out = append(out, e)
 	}
