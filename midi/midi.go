@@ -9,6 +9,7 @@ import (
 )
 
 //MIDI a midi file
+//based on https://www.csie.ntu.edu.tw/~r92092/ref/midi/ [02-01-2020 02:57]
 type MIDI struct {
 	Header Header
 	Tracks []Track
