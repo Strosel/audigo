@@ -18,12 +18,12 @@ func (me *ModeEvent) SetDelta(v VLQ) {
 }
 
 //Delta return the delta time associated with the event
-func (me ModeEvent) Delta() VLQ {
+func (me *ModeEvent) Delta() VLQ {
 	return me.Duration
 }
 
 //Bytes the event as a byte array
-func (me ModeEvent) Bytes() []byte {
+func (me *ModeEvent) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
 
 	me.Channel %= 16 //only 16 available channels

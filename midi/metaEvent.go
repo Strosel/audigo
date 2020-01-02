@@ -15,12 +15,12 @@ type MetaEvent struct {
 func (me *MetaEvent) SetDelta(v VLQ) {}
 
 //Delta return the delta time associated with the event
-func (me MetaEvent) Delta() VLQ {
+func (me *MetaEvent) Delta() VLQ {
 	return 0
 }
 
 //Bytes the event as a byte array
-func (me MetaEvent) Bytes() []byte {
+func (me *MetaEvent) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
 
 	binary.Write(out, binary.BigEndian, uint8(0xFF))

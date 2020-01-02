@@ -18,12 +18,12 @@ func (se *SysexEvent) SetDelta(v VLQ) {
 }
 
 //Delta return the delta time associated with the event
-func (se SysexEvent) Delta() VLQ {
+func (se *SysexEvent) Delta() VLQ {
 	return se.Duration
 }
 
 //Bytes the event as a byte array
-func (se SysexEvent) Bytes() []byte {
+func (se *SysexEvent) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
 
 	binary.Write(out, binary.BigEndian, se.Type)

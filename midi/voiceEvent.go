@@ -19,12 +19,12 @@ func (ve *VoiceEvent) SetDelta(v VLQ) {
 }
 
 //Delta return the delta time associated with the event
-func (ve VoiceEvent) Delta() VLQ {
+func (ve *VoiceEvent) Delta() VLQ {
 	return ve.Duration
 }
 
 //Bytes the event as a byte array
-func (ve VoiceEvent) Bytes() []byte {
+func (ve *VoiceEvent) Bytes() []byte {
 	out := bytes.NewBuffer([]byte{})
 
 	ve.Channel %= 16 //only 16 available channels
