@@ -8,10 +8,17 @@ import (
 
 //Song is a song
 type Song struct {
-	Meter       string
-	Measure     time.Duration
-	BPM         int
+	Meter string
+	//Tempo is the tempo of the song in quarter notes/min
+	//as is usually anotated as <quarter note> = <number>
+	Tempo       uint32
 	Instruments map[string][]Playable
+}
+
+//UpdateTempo updates the tempo of the song and returns the required meta event
+func (s *Song) UpdateTempo(t uint32) midi.MetaEvent {
+	s.Tempo = t
+	return midi.MetaTempo(uint32(time.Minute.Microseconds()) / s.Tempo)
 }
 
 //ToMIDI converts the song into a midi file
@@ -26,6 +33,7 @@ func (s Song) ToMIDI() midi.MIDI {
 		t := midi.Track{
 			midi.MetaChannelPrefix(ch),
 			midi.MetaInstrument(name),
+			midi.MetaTempo(uint32(time.Minute.Microseconds()) / s.Tempo),
 		}
 
 		for _, n := range stave {
