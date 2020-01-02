@@ -103,7 +103,7 @@ func (n Note) Frequency() float64 {
 //how long the measure takes, aka the length of a whole note
 func (n Note) Duration(measure time.Duration) time.Duration {
 	//the fraction of the measure the note takes
-	fraq := 1. / math.Pow(float64(n.Value), 2.)
+	fraq := 1. / math.Pow(2., float64(n.Value))
 
 	//add dots
 	if n.Dots > 0 {
@@ -122,7 +122,7 @@ func (n Note) Duration(measure time.Duration) time.Duration {
 //based on how many ticks a quarter note is
 func (n Note) TickDuration(quarter uint16) uint16 {
 	//the fraction of the measure the note takes
-	fraq := 1. / math.Pow(float64(n.Value), 2.)
+	fraq := 1. / math.Pow(2., float64(n.Value))
 
 	//add dots
 	if n.Dots > 0 {
@@ -144,7 +144,7 @@ func (n Note) RestDuration(measure time.Duration) time.Duration {
 		return 0
 	}
 	//the fraction of the measure the rest takes
-	fraq := 1. / math.Pow(float64(n.Rest), 2.)
+	fraq := 1. / math.Pow(2., float64(n.Rest))
 	return time.Duration(float64(measure) * fraq)
 }
 
@@ -155,7 +155,7 @@ func (n Note) RestTickDuration(quarter uint16) uint16 {
 		return 0
 	}
 	//the fraction of the measure the rest takes
-	fraq := 1. / math.Pow(float64(n.Rest), 2.)
+	fraq := 1. / math.Pow(2., float64(n.Rest))
 	return uint16(float64(4*quarter) * fraq)
 }
 
