@@ -13,6 +13,11 @@ type VoiceEvent struct {
 	Duration VLQ
 }
 
+//SetDelta set the delta time associated with the event
+func (ve *VoiceEvent) SetDelta(v VLQ) {
+	ve.Duration = v
+}
+
 //Delta return the delta time associated with the event
 func (ve VoiceEvent) Delta() VLQ {
 	return ve.Duration

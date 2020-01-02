@@ -12,6 +12,11 @@ type ModeEvent struct {
 	Duration VLQ
 }
 
+//SetDelta set the delta time associated with the event
+func (me *ModeEvent) SetDelta(v VLQ) {
+	me.Duration = v
+}
+
 //Delta return the delta time associated with the event
 func (me ModeEvent) Delta() VLQ {
 	return me.Duration

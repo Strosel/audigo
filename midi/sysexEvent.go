@@ -12,6 +12,11 @@ type SysexEvent struct {
 	Duration VLQ
 }
 
+//SetDelta set the delta time associated with the event
+func (se *SysexEvent) SetDelta(v VLQ) {
+	se.Duration = v
+}
+
 //Delta return the delta time associated with the event
 func (se SysexEvent) Delta() VLQ {
 	return se.Duration

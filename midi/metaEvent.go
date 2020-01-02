@@ -11,6 +11,9 @@ type MetaEvent struct {
 	Data []uint8
 }
 
+//SetDelta is ignored for meta events
+func (me *MetaEvent) SetDelta(v VLQ) {}
+
 //Delta return the delta time associated with the event
 func (me MetaEvent) Delta() VLQ {
 	return 0
