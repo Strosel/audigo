@@ -102,6 +102,9 @@ func (n Note) Frequency() float64 {
 //Duration calculates and returns the duration of the note based on
 //how long the measure takes, aka the length of a whole note
 func (n Note) Duration(measure time.Duration) time.Duration {
+	if n.Value == None {
+		return 0
+	}
 	//the fraction of the measure the note takes
 	fraq := 1. / math.Pow(2., float64(n.Value))
 
@@ -121,6 +124,9 @@ func (n Note) Duration(measure time.Duration) time.Duration {
 //TickDuration calculates and returns the duration of the note in ticks
 //based on how many ticks a quarter note is
 func (n Note) TickDuration(quarter uint16) uint16 {
+	if n.Value == None {
+		return 0
+	}
 	//the fraction of the measure the note takes
 	fraq := 1. / math.Pow(2., float64(n.Value))
 

@@ -88,7 +88,7 @@ func (mc MultiChord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 
 		//start the next note if there is one
 		depth[i]++
-		if depth[i] < len(mc) {
+		if depth[i] < len(mc) && mc[depth[i]][i].Value != None {
 			start := mc[depth[i]][i].ToMIDI(ticks, ch, vel)[0]
 			start.SetDelta(0)
 			out = append(out, start)
