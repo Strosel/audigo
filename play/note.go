@@ -18,8 +18,6 @@ type Note struct {
 	Accidental Accidental
 	Value      Duration
 	Dots       int
-	//Rest is a rest before the note
-	Rest Duration
 }
 
 //Parse parses a string of format c4b. into a note
@@ -57,16 +55,8 @@ func Parse(note string, d Duration) Note {
 		Accidental: acc,
 		Value:      d,
 		Dots:       len(sNote[3]),
-		Rest:       None,
 	}
 
-	return n
-}
-
-//ParseR Like Parse but with the rest r before the note
-func ParseR(note string, d Duration, r Duration) Note {
-	n := Parse(note, d)
-	n.Rest = r
 	return n
 }
 
@@ -143,35 +133,12 @@ func (n Note) TickDuration(quarter uint16) uint16 {
 	return uint16(float64(4*quarter) * fraq)
 }
 
-//RestDuration calculates and returns the duration of the rest preceding the
-//note based on how long the measure takes, aka the length of a whole note
-func (n Note) RestDuration(measure time.Duration) time.Duration {
-	if n.Rest == None {
-		return 0
-	}
-	//the fraction of the measure the rest takes
-	fraq := 1. / math.Pow(2., float64(n.Rest))
-	return time.Duration(float64(measure) * fraq)
-}
-
-//RestTickDuration calculates and returns the duration of the rest preceding the
-//note in ticks based on how many ticks a quarter note is
-func (n Note) RestTickDuration(quarter uint16) uint16 {
-	if n.Rest == None {
-		return 0
-	}
-	//the fraction of the measure the rest takes
-	fraq := 1. / math.Pow(2., float64(n.Rest))
-	return uint16(float64(4*quarter) * fraq)
-}
-
 //ToMIDI converts the note to a midi NoteOn and NoteOff event
 //with the given ticks for a quarter note, channel and velocity
 func (n Note) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := []midi.Event{}
 	e := &midi.VoiceEvent{
-		Channel:  ch,
-		Duration: midi.VLQ(n.RestTickDuration(ticks)),
+		Channel: ch,
 	}
 	e.NoteOn(0x3C+uint8(n.Dist()), vel)
 	out = append(out, e)

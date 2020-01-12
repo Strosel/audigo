@@ -36,24 +36,11 @@ func (mc MultiChord) TickDuration(quarter uint16) uint16 {
 	return m
 }
 
-//RestDuration calculates and returns the duration of the rest preceding the
-//tie based on how long the measure takes, aka the length of a whole note
-func (mc MultiChord) RestDuration(measure time.Duration) time.Duration {
-	return mc[0].RestDuration(measure)
-}
-
-//RestTickDuration calculates and returns the duration of the rest preceding the
-//tie in ticks based on how many ticks a quarter note is
-func (mc MultiChord) RestTickDuration(quarter uint16) uint16 {
-	return mc[0].RestTickDuration(quarter)
-}
-
 //ToMIDI converst the chord into an array of midi events
 func (mc MultiChord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 	out := []midi.Event{}
 	e := &midi.VoiceEvent{
-		Channel:  ch,
-		Duration: midi.VLQ(mc.RestTickDuration(ticks)),
+		Channel: ch,
 	}
 	//Start the first chord
 	for i, n := range mc[0] {
