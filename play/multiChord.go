@@ -1,7 +1,6 @@
 package play
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -71,7 +70,6 @@ func (mc MultiChord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 		stop := mc[depth[i]][i].ToMIDI(ticks, ch, vel)[1]
 		stop.SetDelta(midi.VLQ(dur))
 		out = append(out, stop)
-		fmt.Println("stop", depth[i], i, dur)
 
 		//start the next note if there is one
 		depth[i]++
@@ -79,7 +77,6 @@ func (mc MultiChord) ToMIDI(ticks uint16, ch, vel uint8) []midi.Event {
 			start := mc[depth[i]][i].ToMIDI(ticks, ch, vel)[0]
 			start.SetDelta(0)
 			out = append(out, start)
-			fmt.Println("start", depth[i], i)
 		}
 
 		//increse all times since change by duration
