@@ -144,14 +144,14 @@ func MetaTimeSignature(n, d, c, b uint8) *MetaEvent {
 
 //MetaKey the key of the song
 //sf 0 represents a key of C, negative numbers represent 'flats', while positive numbers represent 'sharps'
-func MetaKey(sf uint8, minor bool) *MetaEvent {
+func MetaKey(sf int8, minor bool) *MetaEvent {
 	var m uint8 = 0
 	if minor {
 		m = 1
 	}
 	return &MetaEvent{
 		Type: 0x59,
-		Data: []uint8{sf, m},
+		Data: []uint8{uint8(sf), m},
 	}
 }
 
