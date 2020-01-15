@@ -19,7 +19,7 @@ type Song struct {
 
 //ToMIDI converts the song into a midi file
 func (s Song) ToMIDI() midi.MIDI {
-	var ticks uint16 = 50 //should be inputed or calculated
+	var ticks uint16 = 64 //should be inputed or calculated
 	m := midi.MIDI{
 		Tracks: []midi.Track{},
 	}
