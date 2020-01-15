@@ -12,7 +12,7 @@ type Song struct {
 	Tempo uint32
 	//Key is the key in number of flats or sharps, -7<k<7
 	//flats are notated with negative numbers and sharps with positive
-	Key         uint8
+	Key         int8
 	Maj         bool
 	Instruments map[string][]Playable
 }
