@@ -16,6 +16,7 @@ func (ut updateTempo) ToMIDI(uint16, uint8, uint8) []midi.Event {
 	return []midi.Event{me}
 }
 
+//UpdateTempo updates the tempo of the song
 func UpdateTempo(t uint32) Playable {
 	return updateTempo(uint32(time.Minute.Microseconds()) / t)
 }

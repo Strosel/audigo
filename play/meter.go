@@ -16,6 +16,7 @@ func (um *updateMeter) ToMIDI(uint16, uint8, uint8) []midi.Event {
 	return []midi.Event{}
 }
 
+//UpdateMeter updates the meter or time signature of the song
 func UpdateMeter(m string) Playable {
 	um := updateMeter(m)
 	return &um

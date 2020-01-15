@@ -7,6 +7,7 @@ import (
 	"github.com/strosel/audigo/midi"
 )
 
+//Rest is a rest aka a silent duration
 type Rest Duration
 
 //Duration calculates and returns the duration of the note based on
