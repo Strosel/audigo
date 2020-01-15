@@ -1,8 +1,6 @@
 package play
 
 import (
-	"time"
-
 	"github.com/strosel/audigo/midi"
 )
 
@@ -11,7 +9,11 @@ type Song struct {
 	Meter string
 	//Tempo is the tempo of the song in quarter notes/min
 	//as is usually anotated as <quarter note> = <number>
-	Tempo       uint32
+	Tempo uint32
+	//Key is the key in number of flats or sharps, -7<k<7
+	//flats are notated with negative numbers and sharps with positive
+	Key         uint8
+	Maj         bool
 	Instruments map[string][]Playable
 }
 
@@ -27,8 +29,10 @@ func (s Song) ToMIDI() midi.MIDI {
 		t := midi.Track{
 			midi.MetaChannelPrefix(ch),
 			midi.MetaInstrument(name),
-			midi.MetaTempo(uint32(time.Minute.Microseconds()) / s.Tempo),
 		}
+		t = append(t, UpdateTempo(s.Tempo).ToMIDI(0, 0, 0)...)
+		t = append(t, UpdateMeter(s.Meter).ToMIDI(0, 0, 0)...)
+		t = append(t, UpdateKey(s.Key, s.Maj).ToMIDI(0, 0, 0)...)
 
 		for _, n := range stave {
 			t = append(t, n.ToMIDI(ticks, ch, 40)...)
