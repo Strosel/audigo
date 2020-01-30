@@ -11,9 +11,9 @@ func (i *Instrument) HasNext() bool {
 	return i.pos+1 < len(i.Staff)
 }
 
-//Peek returns the next playable in the staff
+//Peek returns the current playable in the staff
 func (i *Instrument) Peek() Playable {
-	return i.Staff[i.pos+1]
+	return i.Staff[i.pos]
 }
 
 //Next returns current playable in the staff and increments the internal position
