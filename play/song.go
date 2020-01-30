@@ -14,7 +14,7 @@ type Song struct {
 	//flats are notated with negative numbers and sharps with positive
 	Key         int8
 	Maj         bool
-	Instruments map[string][]Playable
+	Instruments map[string]Instrument
 }
 
 //ToMIDI converts the song into a midi file
@@ -34,8 +34,8 @@ func (s Song) ToMIDI() midi.MIDI {
 		t = append(t, UpdateMeter(s.Meter).ToMIDI(0, 0, 0)...)
 		t = append(t, UpdateKey(s.Key, s.Maj).ToMIDI(0, 0, 0)...)
 
-		for _, n := range stave {
-			t = append(t, n.ToMIDI(ticks, ch, 40)...)
+		for stave.HasNext() {
+			t = append(t, stave.Next().ToMIDI(ticks, ch, 40)...)
 		}
 
 		t = append(t, midi.MetaEndTrack())
