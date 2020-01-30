@@ -7,7 +7,7 @@ import (
 )
 
 type updateKey struct {
-	key   int8
+	key   uint8
 	major bool
 }
 
@@ -20,7 +20,7 @@ func (uk updateKey) ToMIDI(uint16, uint8, uint8) []midi.Event {
 }
 
 //UpdateKey updates the key of the song
-func UpdateKey(k int8, maj bool) Playable {
+func UpdateKey(k uint8, maj bool) Playable {
 	return updateKey{
 		key:   k,
 		major: maj,
